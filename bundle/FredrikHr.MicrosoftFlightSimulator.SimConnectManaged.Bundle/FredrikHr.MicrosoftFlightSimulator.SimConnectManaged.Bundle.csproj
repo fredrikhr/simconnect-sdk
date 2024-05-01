@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+
+  <PropertyGroup>
+    <Configurations>Release</Configurations>
+    <DefaultProjectConfiguration>Release</DefaultProjectConfiguration>
+    <Platforms>x64</Platforms>
+    <DefaultProjectPlatform>x64</DefaultProjectPlatform>
+  </PropertyGroup>
+
+  <Import Sdk="Microsoft.Build.NoTargets" Project="Sdk.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>false</IncludeSymbols>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <!-- <NoWarn>$(NoWarn);NU5100</NoWarn> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <BuildOutputInPackage Include="$(MsfsSdkPath)SimConnect SDK\lib\managed\*.*" />
+  </ItemGroup>
+
+  <Import Sdk="Microsoft.Build.NoTargets" Project="Sdk.targets" />
+  <Import Project="..\BundleBuildOutput.targets" />
+
+</Project>

@@ -3,6 +3,7 @@
   <PropertyGroup Label="BasePath">
     <BaseOutputPath>$(MSBuildThisFileDirectory)bin\$(MSBuildProjectName)\</BaseOutputPath>
     <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <BasePackageOutputPath>$(MSBuildThisFileDirectory).nuget\packages\</BasePackageOutputPath>
   </PropertyGroup>
   <PropertyGroup Label="SourceLink">
     <PublishRepositoryUrl>true</PublishRepositoryUrl>

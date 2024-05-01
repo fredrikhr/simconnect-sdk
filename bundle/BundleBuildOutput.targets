@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+
+  <PropertyGroup>
+    <MSBuildAllProjects>
+      $(MSBuildAllProjects);$(MSBuildThisFileFullPath)
+    </MSBuildAllProjects>
+  </PropertyGroup>
+
+  <Target
+    Name="GetTargetPath"
+    DependsOnTargets="$(GetTargetPathDependsOn)"
+    Returns="@(TargetPathWithTargetPlatformMoniker)" />
+  <Target
+    Name="GetTargetPathWithTargetPlatformMoniker"
+    BeforeTargets="GetTargetPath"
+    DependsOnTargets="$(GetTargetPathWithTargetPlatformMonikerDependsOn)"
+    Returns="@(TargetPathWithTargetPlatformMoniker)">
+    <ItemGroup>
+      <TargetPathWithTargetPlatformMoniker Include="@(BuildOutputInPackage)">
+        <!-- TargetFrameworkIdentifier -->
+        <TargetFrameworkIdentifier
+          Condition="'%(BuildOutputInPackage.TargetFrameworkIdentifier)' != ''"
+        >%(BuildOutputInPackage.TargetFrameworkIdentifier)</TargetFrameworkIdentifier>
+        <TargetFrameworkIdentifier
+          Condition="'%(BuildOutputInPackage.TargetFrameworkIdentifier)' == '' and '%(BuildOutputInPackage.TargetFramework)' != ''"
+        >$([MSBuild]::GetTargetFrameworkIdentifier('%(BuildOutputInPackage.TargetFramework)'))</TargetFrameworkIdentifier>
+        <TargetFrameworkIdentifier
+          Condition="'%(BuildOutputInPackage.TargetFrameworkIdentifier)' == '' and '%(BuildOutputInPackage.TargetFramework)' == ''"
+        >$(TargetFrameworkIdentifier)</TargetFrameworkIdentifier>
+
+        <!-- TargetFrameworkVersion -->
+        <TargetFrameworkVersion
+          Condition="'%(BuildOutputInPackage.TargetFrameworkVersion)' != ''"
+        >%(BuildOutputInPackage.TargetFrameworkVersion)</TargetFrameworkVersion>
+        <TargetFrameworkVersion
+          Condition="'%(BuildOutputInPackage.TargetFrameworkVersion)' == '' and '%(BuildOutputInPackage.TargetFramework)' != ''"
+        >$([MSBuild]::GetTargetFrameworkVersion('%(BuildOutputInPackage.TargetFramework)'))</TargetFrameworkVersion>
+        <TargetFrameworkVersion
+          Condition="'%(BuildOutputInPackage.TargetFrameworkVersion)' == '' and '%(BuildOutputInPackage.TargetFramework)' == ''"
+        >$(TargetFrameworkVersion.TrimStart('vV'))</TargetFrameworkVersion>
+
+        <!-- TargetPlatformIdentifier -->
+        <TargetPlatformIdentifier
+          Condition="'%(BuildOutputInPackage.TargetPlatformIdentifier)' != ''"
+        >%(BuildOutputInPackage.TargetPlatformIdentifier)</TargetPlatformIdentifier>
+        <TargetPlatformIdentifier
+          Condition="'%(BuildOutputInPackage.TargetPlatformIdentifier)' == '' and '%(BuildOutputInPackage.TargetFramework)' != ''"
+        >$([MSBuild]::ValueOrDefault('$([MSBuild]::GetTargetPlatformIdentifier('%(BuildOutputInPackage.TargetFramework)'))', '$(TargetPlatformIdentifier)'))</TargetPlatformIdentifier>
+        <TargetPlatformIdentifier
+          Condition="'%(BuildOutputInPackage.TargetPlatformIdentifier)' == '' and '%(BuildOutputInPackage.TargetFramework)' == ''"
+        >$(TargetPlatformIdentifier)</TargetPlatformIdentifier>
+
+        <!-- TargetPlatformMoniker -->
+        <TargetPlatformMoniker
+          Condition="'%(BuildOutputInPackage.TargetPlatformMoniker)' != ''"
+        >%(BuildOutputInPackage.TargetPlatformMoniker)</TargetPlatformMoniker>
+        <TargetPlatformMoniker
+          Condition="'%(BuildOutputInPackage.TargetPlatformMoniker)' == '' and '%(BuildOutputInPackage.TargetPlatformIdentifier)' != '' and '%(BuildOutputInPackage.TargetPlatformVersion)' != ''"
+        >%(BuildOutputInPackage.TargetPlatformIdentifier),Version=%(BuildOutputInPackage.TargetPlatformVersion)</TargetPlatformMoniker>
+        <TargetPlatformMoniker
+          Condition="'%(BuildOutputInPackage.TargetPlatformMoniker)' == '' and '%(BuildOutputInPackage.TargetPlatformIdentifier)' == '' and '%(BuildOutputInPackage.TargetPlatformVersion)' == ''"
+        >$(TargetPlatformMoniker)</TargetPlatformMoniker>
+
+        <ReferenceAssembly Condition="'%(BuildOutputInPackage.ProduceReferenceAssembly)' == 'true'">%(BuildOutputInPackage.ReferenceAssemblyPath)</ReferenceAssembly>
+        <CopyUpToDateMarker>@(CopyUpToDateMarker)</CopyUpToDateMarker>
+      </TargetPathWithTargetPlatformMoniker>
+    </ItemGroup>
+  </Target>
+
+</Project>
