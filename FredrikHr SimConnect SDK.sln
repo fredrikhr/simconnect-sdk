@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "generator", "generator", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.ClangSharp", "generator\FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.ClangSharp\FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.ClangSharp.csproj", "{CBC5B20C-E6E4-4B3C-B9C3-A897C29F533C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.SourceGen", "generator\FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.SourceGen\FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.SourceGen.csproj", "{28D1C88F-B4FD-4F85-81AC-2C2841C49BB6}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{B1E58813-5E59-40F3-83CA-B211230A2111}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FredrikHr.MicrosoftFlightSimulator.FlightPlanLoader", "sample\FredrikHr.MicrosoftFlightSimulator.FlightPlanLoader\FredrikHr.MicrosoftFlightSimulator.FlightPlanLoader.csproj", "{594E29A5-6AC3-4A2F-B116-1502B3A8A34B}"
@@ -44,8 +46,12 @@ Global
 		{483AE753-8FAE-4B12-B6AB-7AFF20707C9F}.Release|Any CPU.Build.0 = Release|x64
 		{CBC5B20C-E6E4-4B3C-B9C3-A897C29F533C}.Debug|Any CPU.ActiveCfg = Release|Both
 		{CBC5B20C-E6E4-4B3C-B9C3-A897C29F533C}.Debug|Any CPU.Build.0 = Release|Both
-		{CBC5B20C-E6E4-4B3C-B9C3-A897C29F533C}.Release|Any CPU.ActiveCfg = Release|Both
-		{CBC5B20C-E6E4-4B3C-B9C3-A897C29F533C}.Release|Any CPU.Build.0 = Release|Both
+		{CBC5B20C-E6E4-4B3C-B9C3-A897C29F533C}.Release|Any CPU.ActiveCfg = Release|Xml
+		{CBC5B20C-E6E4-4B3C-B9C3-A897C29F533C}.Release|Any CPU.Build.0 = Release|Xml
+		{28D1C88F-B4FD-4F85-81AC-2C2841C49BB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28D1C88F-B4FD-4F85-81AC-2C2841C49BB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28D1C88F-B4FD-4F85-81AC-2C2841C49BB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28D1C88F-B4FD-4F85-81AC-2C2841C49BB6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{594E29A5-6AC3-4A2F-B116-1502B3A8A34B}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{594E29A5-6AC3-4A2F-B116-1502B3A8A34B}.Debug|Any CPU.Build.0 = Debug|x64
 		{594E29A5-6AC3-4A2F-B116-1502B3A8A34B}.Release|Any CPU.ActiveCfg = Release|x64
@@ -66,6 +72,7 @@ Global
 		{777FF479-E5AB-45C1-879E-C58032EE6C43} = {C6C0A2E3-E21E-44F3-94E0-0C2D6D30DE2C}
 		{483AE753-8FAE-4B12-B6AB-7AFF20707C9F} = {C6C0A2E3-E21E-44F3-94E0-0C2D6D30DE2C}
 		{CBC5B20C-E6E4-4B3C-B9C3-A897C29F533C} = {9DCD1F63-5812-4E62-A02B-7669900A2BED}
+		{28D1C88F-B4FD-4F85-81AC-2C2841C49BB6} = {9DCD1F63-5812-4E62-A02B-7669900A2BED}
 		{594E29A5-6AC3-4A2F-B116-1502B3A8A34B} = {B1E58813-5E59-40F3-83CA-B211230A2111}
 		{C04D81BB-1527-4110-8BF2-6E30FBA2A6EC} = {87A7FA70-4692-4B00-852A-25412E4514CF}
 		{5ABDA612-A8E2-439E-B486-7A8E4AF1DE2B} = {87A7FA70-4692-4B00-852A-25412E4514CF}

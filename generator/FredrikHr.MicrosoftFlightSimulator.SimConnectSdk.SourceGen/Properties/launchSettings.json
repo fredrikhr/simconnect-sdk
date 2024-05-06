@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Project": {
+      "commandName": "Project",
+      "commandLineArgs": "--source-directory \"$(MSBuildProjectDirectory)/../FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.ClangSharp/Xml\"",
+      "workingDirectory": "$(MSBuildProjectDirectory)",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
