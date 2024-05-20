@@ -1,72 +1,85 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project>
 
   <PropertyGroup>
     <Configurations>Release</Configurations>
     <DefaultProjectConfiguration>Release</DefaultProjectConfiguration>
-    <Platforms>CSharp;Xml;Both</Platforms>
-    <DefaultProjectPlatform>Xml</DefaultProjectPlatform>
+    <Platforms>x64</Platforms>
+    <DefaultProjectPlatform>x64</DefaultProjectPlatform>
   </PropertyGroup>
 
   <Import Sdk="Microsoft.Build.NoTargets" Project="Sdk.props" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\bundle\MsfsSdkPath.props" />
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <OutputPath>$(MSBuildThisFileDirectory)..\..\generated</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <SimConnectPrependLine Include="#include &lt;Windows.h&gt;" />
-    <SimConnectSourceFile
-      Include="$([MSBuild]::EnsureTrailingSlash('$(MSFS_SDK)'))\SimConnect SDK\include\SimConnect.h"
-    />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ClangSharpOutputDirectory Condition="'$(Platform)' == 'CSharp' or '$(Platform)' == 'Both'" Include="CSharp">
-      <FileExtension>.cs</FileExtension>
+    <SimConnectPrepend Include="SimConnect.prepend.h" />
+    <SimConnectSdkHeader Include="$(MsfsSdkPath)SimConnect SDK\include\SimConnect.h" />
+    <None Include="$(MsfsSdkPath)SimConnect SDK\include\SimConnect.h;$(MsfsSdkPath)version.txt">
+      <LinkBase>SimConnect SDK</LinkBase>
+    </None>
+    <None Include="$(OutputPath)SimConnect.h">
+      <LinkBase>generated</LinkBase>
+    </None>
+    <None Include="$(OutputPath)PInvoke\*.*">
+      <LinkBase>generated\PInvoke</LinkBase>
+    </None>
+    <None Include="$(OutputPath)Xml\*.*">
+      <LinkBase>generated\Xml</LinkBase>
+    </None>
+    <ClInclude Include="$(OutputPath)SimConnect.h" />
+    <ClangSharpPInvokeGeneratorResponseFile Include="SimConnect.ClangSharp.rsp" />
+    <ClangSharpPInvokeGeneratorExecution Include="PInvoke">
+      <GeneratorOutput>$(OutputPath)%(Identity)</GeneratorOutput>
       <OutputMode>CSharp</OutputMode>
-    </ClangSharpOutputDirectory>
-    <ClangSharpOutputDirectory Condition="'$(Platform)' == 'Xml' or '$(Platform)' == 'Both'" Include="Xml">
-      <FileExtension>.xml</FileExtension>
+      <OutputFileExtension>.cs</OutputFileExtension>
+      <MarkerFile>$(OutputPath)ClangSharp.%(Identity).marker</MarkerFile>
+    </ClangSharpPInvokeGeneratorExecution>
+    <ClangSharpPInvokeGeneratorExecution Include="Xml">
+      <GeneratorOutput>$(OutputPath)%(Identity)</GeneratorOutput>
       <OutputMode>Xml</OutputMode>
-    </ClangSharpOutputDirectory>
+      <OutputFileExtension>.xml</OutputFileExtension>
+      <MarkerFile>$(OutputPath)ClangSharp.%(Identity).marker</MarkerFile>
+    </ClangSharpPInvokeGeneratorExecution>
   </ItemGroup>
 
   <Import Sdk="Microsoft.Build.NoTargets" Project="Sdk.targets" />
 
-  <Target
-    Name="GenerateSimConnectHeaderFile"
-    Inputs="@(SimConnectSourceFile)"
-    Outputs="SimConnect.h"
-  >
-    <ReadLinesFromFile File="@(SimConnectSourceFile)">
-      <Output TaskParameter="Lines" ItemName="SimConnectContentLine" />
+  <Import Project="SimConnect.MSBuildTasks.props" />
+
+  <Target Name="BeforeCompile" DependsOnTargets="ConcatClangSharpPInvokeGeneratorHeaderInput" />
+  <Target Name="AfterCompile" DependsOnTargets="ExecuteClangSharpPInvokeGenerator" />
+
+  <Target Name="ConcatClangSharpPInvokeGeneratorHeaderInput" Inputs="$(MSBuildAllProjects);@(SimConnectPrepend);@(ClangSharpPInvokeGeneratorResponseFile);@(SimConnectSdkHeader)" Outputs="@(ClInclude)">
+    <ReadLinesFromFile File="@(SimConnectPrepend)">
+      <Output TaskParameter="Lines" ItemName="SimConnectHeaderLines" />
     </ReadLinesFromFile>
-    <WriteLinesToFile
-      File="SimConnect.h"
-      Lines="@(SimConnectPrependLine);@(SimConnectContentLine)"
-      Overwrite="true"
-      WriteOnlyWhenDifferent="true"
-    />
+    <ReadLinesFromFile File="@(SimConnectSdkHeader)">
+      <Output TaskParameter="Lines" ItemName="SimConnectSdkHeaderLines" />
+    </ReadLinesFromFile>
+    <SimConnectSdkHeaderFixup Lines="@(SimConnectSdkHeaderLines)">
+      <Output TaskParameter="Lines" ItemName="SimConnectHeaderLines" />
+    </SimConnectSdkHeaderFixup>
+    <WriteLinesToFile File="@(ClInclude)" Lines="@(SimConnectHeaderLines)" Overwrite="true" />
   </Target>
 
-  <Target Name="CleanClangSharpOutputDirectory">
-    <CreateItem Include="@(ClangSharpOutputDirectory->'%(Identity)\*%(FileExtension)')" PreserveExistingMetadata="false">
-      <Output TaskParameter="Include" ItemName="ClangSharpOutputFilesToClean" />
+  <Target Name="ExecuteClangSharpPInvokeGenerator" Inputs="$(MSBuildAllProjects);@(ClInclude);@(ClangSharpPInvokeGeneratorResponseFile)" Outputs="@(ClangSharpPInvokeGeneratorExecution->'%(MarkerFile)')" DependsOnTargets="ConcatClangSharpPInvokeGeneratorHeaderInput">
+    <CreateItem Include="@(ClangSharpPInvokeGeneratorExecution->'%(GeneratorOutput)\*%(OutputFileExtension)')" PreserveExistingMetadata="false">
+      <Output TaskParameter="Include" ItemName="ClangSharpPInvokeGeneratorPreviousOutput" />
     </CreateItem>
-    <Delete Files="@(ClangSharpOutputFilesToClean)" />
-  </Target>
-
-  <Target
-    Name="RunClangSharpTool"
-    DependsOnTargets="GenerateSimConnectHeaderFile;CleanClangSharpOutputDirectory"
-    BeforeTargets="AfterBuild"
-  >
-    <Exec
-      Command="dotnet tool run ClangSharpPInvokeGenerator -- --output-mode %(ClangSharpOutputDirectory.OutputMode) --output %(ClangSharpOutputDirectory.Identity) @SimConnect.ClangSharp.rsp"
-      CustomWarningRegularExpression="^\s*Warning \(Line (?&lt;line&gt;\d+), Column (?&lt;column&gt;\d+) in (?&lt;file&gt;.*)\):\s*(?&lt;message&gt;.*)"
-      IgnoreExitCode="true"
-    />
+    <Delete Files="@(ClangSharpPInvokeGeneratorPreviousOutput)">
+      <Output TaskParameter="DeletedFiles" ItemName="ClangSharpPInvokeGeneratorPreviousOutputDeleted" />
+    </Delete>
+    <Exec Command="dotnet tool run ClangSharpPInvokeGenerator -- &quot;--output:%(ClangSharpPInvokeGeneratorExecution.GeneratorOutput)&quot; --output-mode:%(ClangSharpPInvokeGeneratorExecution.OutputMode) @(ClangSharpPInvokeGeneratorResponseFile->'&quot;@%(FullPath)&quot;', ' ') @(ClInclude->'&quot;--file:%(FullPath)&quot;', ' ')" IgnoreExitCode="true" />
+    <Touch Files="@(ClangSharpPInvokeGeneratorExecution->'%(MarkerFile)')" AlwaysCreate="true" />
   </Target>
 
 </Project>

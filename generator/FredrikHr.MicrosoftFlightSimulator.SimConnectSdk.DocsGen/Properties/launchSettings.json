@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Development": {
+      "commandName": "Project",
+      "commandLineArgs": "--environment Development --contentroot \"$(MSBuildProjectDirectory)/../../generated\"",
+      "workingDirectory": "$(MSBuildProjectDirectory)"
+    }
+  }
+}

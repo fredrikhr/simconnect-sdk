@@ -1,11 +1,6 @@
---file
-SimConnect.h
---libraryPath
-SimConnect.dll
---namespace
-FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.Interop
---methodClassName
-SimConnectNativeMethods
+--libraryPath:SimConnect.dll
+--namespace:FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.Interop
+--methodClassName:SimConnectNativeMethods
 --config
 multi-file
 latest-codegen

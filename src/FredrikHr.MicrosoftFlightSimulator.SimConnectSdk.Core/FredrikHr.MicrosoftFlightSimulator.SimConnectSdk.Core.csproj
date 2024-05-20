@@ -27,6 +27,15 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\generated\PInvoke\*.cs">
+      <LinkBase>Interop</LinkBase>
+    </Compile>
+    <None Include="..\..\generated\PInvoke\*.xml">
+      <LinkBase>Interop</LinkBase>
+    </None>
+  </ItemGroup>
+
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 
 </Project>
