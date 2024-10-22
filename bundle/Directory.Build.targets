@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+
+  <!-- Import Directory.Build file from parent directory -->
+  <PropertyGroup>
+    <MSBuildAllProjects>
+      $(MSBuildAllProjects);$(MSBuildThisFileDirectory)..\Directory.Build.targets
+    </MSBuildAllProjects>
+  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.targets" />
+
+  <!-- Overwrite target imported from parent directory and make it a no-op -->
+  <Target
+    Name="AddRepositoryLicenceFileToPackage"
+    BeforeTargets="Build"
+    Condition="'$(PackageLicenseFile)' == ''"
+  ></Target>
+
+</Project>
