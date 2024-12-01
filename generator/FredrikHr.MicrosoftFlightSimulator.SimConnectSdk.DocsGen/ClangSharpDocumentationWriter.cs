@@ -1,10 +1,13 @@
 using System.Xml;
 
+using Microsoft.Extensions.Logging;
+
 namespace FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen;
 
-internal class ClangSharpDocumentationWriter(
+internal partial class ClangSharpDocumentationWriter(
     string xmlFilePath,
-    XmlWriterSettings xmlWriterSettings
+    XmlWriterSettings xmlWriterSettings,
+    ILogger<ClangSharpDocumentationWriter>? logger = null
     ) : IDisposable
 {
     private readonly XmlWriter xmlWriter = CreateXmlWriter(xmlFilePath, xmlWriterSettings);
@@ -20,4 +23,7 @@ internal class ClangSharpDocumentationWriter(
     {
         xmlWriter.Dispose();
     }
+
+    [LoggerMessage(LogLevel.Warning, $"Unexpected element with name <{{{nameof(childName)}}}>, child of element <{{{nameof(parentName)}}}>.")]
+    private partial void LogUnexpectedChildElement(string childName, string parentName);
 }

@@ -19,6 +19,7 @@ appBuilder.Services.AddHttpClient<MsfsDocsWebsiteClient>()
     })
     .ConfigurePrimaryHttpMessageHandler(MsfsDocsWebsiteClient.GetHttpMessageHandler);
 appBuilder.Services.AddSingleton<MsfsDocsTableOfContentsProvider>();
+
 appBuilder.Services.AddSingleton<XmlResolver>(new XmlPreloadedResolver(XmlKnownDtds.All));
 appBuilder.Services.AddOptions<XmlReaderSettings>()
     .PostConfigure(static (XmlReaderSettings xmlSettings, XmlResolver xmlResolver) =>
@@ -36,8 +37,5 @@ appBuilder.Services.AddOptions<XmlWriterSettings>()
 appBuilder.Services.AddSingleton<ClangSharpDocumentationWriterFactory>();
 
 using IHost appHost = appBuilder.Build();
-await appHost.StartAsync()
-    .ConfigureAwait(continueOnCapturedContext: false);
-
-await appHost.StopAsync()
+await appHost.RunAsync()
     .ConfigureAwait(continueOnCapturedContext: false);
