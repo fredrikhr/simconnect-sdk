@@ -18,6 +18,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <OutputPath>$(MSBuildThisFileDirectory)..\..\generated</OutputPath>
+    <TargetsTriggeredByCompilation>$(TargetsTriggeredByCompilation);ExecuteClangSharpPInvokeGenerator</TargetsTriggeredByCompilation>
   </PropertyGroup>
 
   <ItemGroup>
@@ -55,10 +56,11 @@
 
   <Import Project="SimConnect.MSBuildTasks.props" />
 
-  <Target Name="BeforeCompile" DependsOnTargets="ConcatClangSharpPInvokeGeneratorHeaderInput" />
-  <Target Name="AfterCompile" DependsOnTargets="ExecuteClangSharpPInvokeGenerator" />
-
-  <Target Name="ConcatClangSharpPInvokeGeneratorHeaderInput" Inputs="$(MSBuildAllProjects);@(SimConnectPrepend);@(ClangSharpPInvokeGeneratorResponseFile);@(SimConnectSdkHeader)" Outputs="@(ClInclude)">
+  <Target
+    Name="ConcatClangSharpPInvokeGeneratorHeaderInput"
+    Inputs="$(MSBuildAllProjects);@(SimConnectPrepend);@(ClangSharpPInvokeGeneratorResponseFile);@(SimConnectSdkHeader)"
+    Outputs="@(ClInclude)"
+  >
     <ReadLinesFromFile File="@(SimConnectPrepend)">
       <Output TaskParameter="Lines" ItemName="SimConnectHeaderLines" />
     </ReadLinesFromFile>
@@ -71,14 +73,24 @@
     <WriteLinesToFile File="@(ClInclude)" Lines="@(SimConnectHeaderLines)" Overwrite="true" />
   </Target>
 
-  <Target Name="ExecuteClangSharpPInvokeGenerator" Inputs="$(MSBuildAllProjects);@(ClInclude);@(ClangSharpPInvokeGeneratorResponseFile)" Outputs="@(ClangSharpPInvokeGeneratorExecution->'%(MarkerFile)')" DependsOnTargets="ConcatClangSharpPInvokeGeneratorHeaderInput">
+  <Target
+    Name="ExecuteClangSharpPInvokeGenerator"
+    Inputs="$(MSBuildAllProjects);@(ClInclude);@(ClangSharpPInvokeGeneratorResponseFile)"
+    Outputs="@(ClangSharpPInvokeGeneratorExecution->'%(MarkerFile)')"
+    DependsOnTargets="ConcatClangSharpPInvokeGeneratorHeaderInput"
+  >
     <CreateItem Include="@(ClangSharpPInvokeGeneratorExecution->'%(GeneratorOutput)\*%(OutputFileExtension)')" PreserveExistingMetadata="false">
       <Output TaskParameter="Include" ItemName="ClangSharpPInvokeGeneratorPreviousOutput" />
     </CreateItem>
     <Delete Files="@(ClangSharpPInvokeGeneratorPreviousOutput)">
       <Output TaskParameter="DeletedFiles" ItemName="ClangSharpPInvokeGeneratorPreviousOutputDeleted" />
     </Delete>
-    <Exec Command="dotnet tool run ClangSharpPInvokeGenerator -- &quot;--output:%(ClangSharpPInvokeGeneratorExecution.GeneratorOutput)&quot; --output-mode:%(ClangSharpPInvokeGeneratorExecution.OutputMode) @(ClangSharpPInvokeGeneratorResponseFile->'&quot;@%(FullPath)&quot;', ' ') @(ClInclude->'&quot;--file:%(FullPath)&quot;', ' ')" IgnoreExitCode="true" />
+    <Exec
+      Command="dotnet tool run ClangSharpPInvokeGenerator -- &quot;--output:%(ClangSharpPInvokeGeneratorExecution.GeneratorOutput)&quot; --output-mode:%(ClangSharpPInvokeGeneratorExecution.OutputMode) @(ClangSharpPInvokeGeneratorResponseFile->'&quot;@%(FullPath)&quot;', ' ') @(ClInclude->'&quot;--file:%(FullPath)&quot;', ' ')"
+      IgnoreExitCode="false"
+    >
+      <Output TaskParameter="ExitCode" ItemName="ClangSharpPInvokeGeneratorExitCode" />
+    </Exec>
     <Touch Files="@(ClangSharpPInvokeGeneratorExecution->'%(MarkerFile)')" AlwaysCreate="true" />
   </Target>
 
