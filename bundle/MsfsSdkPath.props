@@ -8,14 +8,4 @@
     <MsfsSdkVersion>$([System.IO.File]::ReadAllText('$([MSBuild]::EnsureTrailingSlash('$(MSFS_SDK)'))version.txt').Trim())</MsfsSdkVersion>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <Version>$(MsfsSdkVersion)</Version>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include="$(MsfsSdkPath)\Licenses\*.*">
-      <Pack>true</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
 </Project>

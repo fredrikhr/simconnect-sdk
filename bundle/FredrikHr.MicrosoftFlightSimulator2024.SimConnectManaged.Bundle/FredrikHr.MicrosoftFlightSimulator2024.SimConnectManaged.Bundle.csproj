@@ -11,7 +11,7 @@
   <Import Sdk="Microsoft.Build.NoTargets" Project="Sdk.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.0</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -19,21 +19,18 @@
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>false</IncludeSymbols>
-    <NoWarn>$(NoWarn);NU5128</NoWarn>
     <IncludeBuildOutput>true</IncludeBuildOutput>
-    <BuildOutputTargetFolder>runtimes\$(RuntimeIdentifier)\</BuildOutputTargetFolder>
+    <!-- <NoWarn>$(NoWarn);NU5100</NoWarn> -->
   </PropertyGroup>
   <PropertyGroup>
-    <Version>$(MsfsSdkVersion)</Version>
+    <Version>$(Msfs2024SdkVersion)</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <BuildOutputInPackage Include="$(MsfsSdkPath)SimConnect SDK\lib\SimConnect.dll">
-      <TargetFramework>native</TargetFramework>
-    </BuildOutputInPackage>
+    <BuildOutputInPackage Include="$(Msfs2024SdkPath)SimConnect SDK\lib\managed\*.*" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MsfsSdkPath)\Licenses\*.*">
+    <None Include="$(Msfs2024SdkPath)\Licenses\*.*">
       <Pack>true</Pack>
       <PackagePath></PackagePath>
     </None>

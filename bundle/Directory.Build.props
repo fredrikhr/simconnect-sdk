@@ -15,5 +15,6 @@
     </MSBuildAllProjects>
   </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)MsfsSdkPath.props" />
+  <Import Project="$(MSBuildThisFileDirectory)Msfs2024SdkPath.props" />
 
 </Project>

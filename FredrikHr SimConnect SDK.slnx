@@ -1,0 +1,63 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/build/">
+    <Project Path="build/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.MSBuild/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.MSBuild.csproj" />
+  </Folder>
+  <Folder Name="/bundle/">
+    <File Path="bundle/BundleBuildOutput.targets" />
+    <File Path="bundle/Directory.Build.props" />
+    <File Path="bundle/MsfsSdkPath.props" />
+    <Project Path="bundle/FredrikHr.MicrosoftFlightSimulator.SimConnectManaged.Bundle/FredrikHr.MicrosoftFlightSimulator.SimConnectManaged.Bundle.csproj">
+      <BuildType Project="Release" />
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="bundle/FredrikHr.MicrosoftFlightSimulator.SimConnectNative.Bundle/FredrikHr.MicrosoftFlightSimulator.SimConnectNative.Bundle.csproj">
+      <BuildType Project="Release" />
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="bundle/FredrikHr.MicrosoftFlightSimulator2024.SimConnectManaged.Bundle/FredrikHr.MicrosoftFlightSimulator2024.SimConnectManaged.Bundle.csproj">
+      <BuildType Project="Release" />
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="bundle/FredrikHr.MicrosoftFlightSimulator2024.SimConnectNative.Bundle/FredrikHr.MicrosoftFlightSimulator2024.SimConnectNative.Bundle.csproj">
+      <BuildType Project="Release" />
+      <Platform Project="x64" />
+    </Project>
+  </Folder>
+  <Folder Name="/generated/">
+    <File Path="generated/.gitignore" />
+    <File Path="generated/SimConnect.h" />
+  </Folder>
+  <Folder Name="/generator/">
+    <Project Path="generator/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.ClangSharp/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.ClangSharp.csproj">
+      <BuildType Solution="Debug|Any CPU" Project="Release" />
+      <Platform Solution="*|Any CPU" Project="x64" />
+    </Project>
+    <Project Path="generator/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen.csproj" />
+    <Project Path="generator/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.SourceGen/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.SourceGen.csproj" />
+  </Folder>
+  <Folder Name="/sample/">
+    <Project Path="sample/FredrikHr.MicrosoftFlightSimulator.FlightPlanLoader/FredrikHr.MicrosoftFlightSimulator.FlightPlanLoader.csproj">
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="sample/FredrikHr.MicrosoftFlightSimulator.SimvarWatcher/FredrikHr.MicrosoftFlightSimulator.SimvarWatcher.csproj">
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="sample/FredrikHr.MicrosoftFlightSimulator2024.FlightPlanLoader/FredrikHr.MicrosoftFlightSimulator2024.FlightPlanLoader.csproj">
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="sample/FredrikHr.MicrosoftFlightSimulator2024.SimvarWatcher/FredrikHr.MicrosoftFlightSimulator2024.SimvarWatcher.csproj">
+      <Platform Project="x64" />
+    </Project>
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.Core/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.Core.csproj">
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="src/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.WinForms/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.WinForms.csproj">
+      <Platform Project="x64" />
+    </Project>
+  </Folder>
+</Solution>

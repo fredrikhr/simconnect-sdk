@@ -24,16 +24,16 @@
     <BuildOutputTargetFolder>runtimes\$(RuntimeIdentifier)\</BuildOutputTargetFolder>
   </PropertyGroup>
   <PropertyGroup>
-    <Version>$(MsfsSdkVersion)</Version>
+    <Version>$(Msfs2024SdkVersion)</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <BuildOutputInPackage Include="$(MsfsSdkPath)SimConnect SDK\lib\SimConnect.dll">
+    <BuildOutputInPackage Include="$(Msfs2024SdkPath)SimConnect SDK\lib\SimConnect.dll">
       <TargetFramework>native</TargetFramework>
     </BuildOutputInPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MsfsSdkPath)\Licenses\*.*">
+    <None Include="$(Msfs2024SdkPath)\Licenses\*.*">
       <Pack>true</Pack>
       <PackagePath></PackagePath>
     </None>

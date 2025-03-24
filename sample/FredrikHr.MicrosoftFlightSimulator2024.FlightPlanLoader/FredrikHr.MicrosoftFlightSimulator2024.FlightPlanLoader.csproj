@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <Platforms>x64</Platforms>
+    <DefaultProjectPlatform>x64</DefaultProjectPlatform>
+  </PropertyGroup>
+
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+
+  <PropertyGroup>
+    <LangVersion>12</LangVersion>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <Import Project="..\..\bundle\Msfs2024SdkPath.props" />
+
+  <PropertyGroup>
+    <!-- <SimConnectResolutionSource>EnvironmentVariable</SimConnectResolutionSource> -->
+    <!-- <SimConnectResolutionSource>LocalPackageReference</SimConnectResolutionSource> -->
+    <SimConnectResolutionSource>ProjectReference</SimConnectResolutionSource>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(SimConnectResolutionSource)' == 'EnvironmentVariable'">
+    <Reference Include="Microsoft.FlightSimulator.SimConnect">
+      <HintPath>$(Msfs2024SdkPath)\SimConnect SDK\lib\managed\Microsoft.FlightSimulator.SimConnect.dll</HintPath>
+    </Reference>
+    <Content Include="$(MsfsSdkPath)\SimConnect SDK\lib\SimConnect.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(SimConnectResolutionSource)' == 'LocalPackageReference'">
+    <RestoreAdditionalProjectSources>$(BasePackageOutputPath)Release\</RestoreAdditionalProjectSources>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(SimConnectResolutionSource)' == 'LocalPackageReference'">
+    <PackageReference Include="FredrikHr.MicrosoftFlightSimulator2024.SimConnectManaged.Bundle">
+      <Version>$(Msfs2024SdkVersion)</Version>
+    </PackageReference>
+    <PackageReference Include="FredrikHr.MicrosoftFlightSimulator2024.SimConnectNative.Bundle">
+      <Version>$(Msfs2024SdkVersion)</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(SimConnectResolutionSource)' == 'ProjectReference'">
+    <ProjectReference Include="..\..\bundle\FredrikHr.MicrosoftFlightSimulator2024.SimConnectManaged.Bundle\FredrikHr.MicrosoftFlightSimulator2024.SimConnectManaged.Bundle.csproj" />
+    <ProjectReference Include="..\..\bundle\FredrikHr.MicrosoftFlightSimulator2024.SimConnectNative.Bundle\FredrikHr.MicrosoftFlightSimulator2024.SimConnectNative.Bundle.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <OutputItemType>ReferenceCopyLocalPaths</OutputItemType>
+    </ProjectReference>
+  </ItemGroup>
+
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+
+</Project>

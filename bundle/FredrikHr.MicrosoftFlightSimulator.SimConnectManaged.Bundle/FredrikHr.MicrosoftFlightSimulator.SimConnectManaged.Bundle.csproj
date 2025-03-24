@@ -22,9 +22,18 @@
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <!-- <NoWarn>$(NoWarn);NU5100</NoWarn> -->
   </PropertyGroup>
+  <PropertyGroup>
+    <Version>$(MsfsSdkVersion)</Version>
+  </PropertyGroup>
 
   <ItemGroup>
     <BuildOutputInPackage Include="$(MsfsSdkPath)SimConnect SDK\lib\managed\*.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MsfsSdkPath)\Licenses\*.*">
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <Import Sdk="Microsoft.Build.NoTargets" Project="Sdk.targets" />

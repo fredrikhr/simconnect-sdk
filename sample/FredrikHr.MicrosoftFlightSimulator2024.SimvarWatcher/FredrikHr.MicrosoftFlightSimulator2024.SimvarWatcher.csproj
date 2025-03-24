@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <Platforms>x64</Platforms>
+    <DefaultProjectPlatform>x64</DefaultProjectPlatform>
+  </PropertyGroup>
+
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+
+  <PropertyGroup>
+    <AssemblyName>Simvars2024</AssemblyName>
+    <LangVersion>13</LangVersion>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <Import Project="..\..\bundle\Msfs2024SdkPath.props" />
+  <PropertyGroup>
+    <ApplicationIcon>$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\assets\SimVarWatcher48x48.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile
+      Include="$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\**\*.cs"
+      Exclude="$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\obj\**\*.*;$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\bin\**\*.*;$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\Properties\AssemblyInfo.cs"
+    />
+    <ApplicationDefinition Include="$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page
+      Include="$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\**\*.xaml"
+      Exclude="$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\obj\**\*.*;$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\bin\**\*.*"
+    >
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <EmbeddedResource
+      Include="$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\**\*.resx"
+      Exclude="$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\obj\**\*.*;$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\bin\**\*.*"
+    >
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\%(RecursiveDir)\%(Filename).Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None
+      Include="$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\**\*.settings"
+      Exclude="$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\obj\**\*.*;$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\bin\**\*.*"
+    >
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\%(RecursiveDir)\%(Filename).Designer.cs</LastGenOutput>
+    </None>
+    <!--
+    <None
+      Include="$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\**\*.config"
+      Exclude="$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\obj\**\*.*;$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\bin\**\*.*"
+    />
+    -->
+    <Resource
+      Include="$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\**\*.ico"
+      Exclude="$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\obj\**\*.*;$(Msfs2024SdkPath)\Samples\VisualStudio\SimvarWatcher\bin\**\*.*"
+    />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- <SimConnectResolutionSource>EnvironmentVariable</SimConnectResolutionSource> -->
+    <!-- <SimConnectResolutionSource>LocalPackageReference</SimConnectResolutionSource> -->
+    <SimConnectResolutionSource>ProjectReference</SimConnectResolutionSource>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(SimConnectResolutionSource)' == 'EnvironmentVariable'">
+    <Reference Include="Microsoft.FlightSimulator.SimConnect">
+      <HintPath>$(Msfs2024SdkPath)\SimConnect SDK\lib\managed\Microsoft.FlightSimulator.SimConnect.dll</HintPath>
+    </Reference>
+    <Content Include="$(Msfs2024SdkPath)\SimConnect SDK\lib\SimConnect.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(SimConnectResolutionSource)' == 'LocalPackageReference'">
+    <RestoreAdditionalProjectSources>$(BasePackageOutputPath)Release\</RestoreAdditionalProjectSources>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(SimConnectResolutionSource)' == 'LocalPackageReference'">
+    <PackageReference Include="FredrikHr.MicrosoftFlightSimulator2024.SimConnectManaged.Bundle">
+      <Version>$(Msfs2024SdkVersion)</Version>
+    </PackageReference>
+    <PackageReference Include="FredrikHr.MicrosoftFlightSimulator2024.SimConnectNative.Bundle">
+      <Version>$(Msfs2024SdkVersion)</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(SimConnectResolutionSource)' == 'ProjectReference'">
+    <ProjectReference Include="..\..\bundle\FredrikHr.MicrosoftFlightSimulator2024.SimConnectManaged.Bundle\FredrikHr.MicrosoftFlightSimulator2024.SimConnectManaged.Bundle.csproj" />
+    <ProjectReference Include="..\..\bundle\FredrikHr.MicrosoftFlightSimulator2024.SimConnectNative.Bundle\FredrikHr.MicrosoftFlightSimulator2024.SimConnectNative.Bundle.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <OutputItemType>ReferenceCopyLocalPaths</OutputItemType>
+    </ProjectReference>
+  </ItemGroup>
+
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+
+</Project>

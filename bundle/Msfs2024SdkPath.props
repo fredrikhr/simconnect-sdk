@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+
+  <PropertyGroup>
+    <Msfs2024SdkPath>$([MSBuild]::EnsureTrailingSlash('$(MSFS2024_SDK)'))</Msfs2024SdkPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Msfs2024SdkVersion>$([System.IO.File]::ReadAllText('$([MSBuild]::EnsureTrailingSlash('$(MSFS2024_SDK)'))version.txt').Trim())</Msfs2024SdkVersion>
+  </PropertyGroup>
+
+</Project>
