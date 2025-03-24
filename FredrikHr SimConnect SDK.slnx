@@ -26,17 +26,26 @@
       <Platform Project="x64" />
     </Project>
   </Folder>
-  <Folder Name="/generated/">
-    <File Path="generated/.gitignore" />
-    <File Path="generated/SimConnect.h" />
+  <Folder Name="/generated/" />
+  <Folder Name="/generated/MSFS/">
+    <File Path="generated/MSFS/.gitignore" />
+    <File Path="generated/MSFS/SimConnect.h" />
+  </Folder>
+  <Folder Name="/generated/MSFS2024/">
+    <File Path="generated/MSFS2024/.gitignore" />
+    <File Path="generated/MSFS2024/SimConnect.h" />
   </Folder>
   <Folder Name="/generator/">
     <Project Path="generator/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.ClangSharp/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.ClangSharp.csproj">
-      <BuildType Solution="Debug|Any CPU" Project="Release" />
-      <Platform Solution="*|Any CPU" Project="x64" />
+      <BuildType Project="Release" />
+      <Platform Project="x64" />
     </Project>
     <Project Path="generator/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen.csproj" />
     <Project Path="generator/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.SourceGen/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.SourceGen.csproj" />
+    <Project Path="generator/FredrikHr.MicrosoftFlightSimulator2024.SimConnectSdk.ClangSharp/FredrikHr.MicrosoftFlightSimulator2024.SimConnectSdk.ClangSharp.csproj">
+      <BuildType Project="Release" />
+      <Platform Project="x64" />
+    </Project>
   </Folder>
   <Folder Name="/sample/">
     <Project Path="sample/FredrikHr.MicrosoftFlightSimulator.FlightPlanLoader/FredrikHr.MicrosoftFlightSimulator.FlightPlanLoader.csproj">

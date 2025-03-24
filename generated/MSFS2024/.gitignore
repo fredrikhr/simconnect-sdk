@@ -1,0 +1,5 @@
+SimConnect.h
+PInvoke/*.cs
+PInvoke/*.xml
+Xml/*.xml
+*.marker

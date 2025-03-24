@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <Import Sdk="Microsoft.Build.NoTargets" Project="Sdk.props" />
-  <Import Project="$(MSBuildThisFileDirectory)..\..\bundle\MsfsSdkPath.props" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\bundle\Msfs2024SdkPath.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -17,14 +17,14 @@
     <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <OutputPath>$(MSBuildThisFileDirectory)..\..\generated\MSFS</OutputPath>
+    <OutputPath>$(MSBuildThisFileDirectory)..\..\generated\MSFS2024</OutputPath>
     <TargetsTriggeredByCompilation>$(TargetsTriggeredByCompilation);ExecuteClangSharpPInvokeGenerator</TargetsTriggeredByCompilation>
   </PropertyGroup>
 
   <ItemGroup>
     <SimConnectPrepend Include="SimConnect.prepend.h" />
-    <SimConnectSdkHeader Include="$(MsfsSdkPath)SimConnect SDK\include\SimConnect.h" />
-    <None Include="$(MsfsSdkPath)SimConnect SDK\include\SimConnect.h;$(MsfsSdkPath)version.txt">
+    <SimConnectSdkHeader Include="$(Msfs2024SdkPath)SimConnect SDK\include\SimConnect.h" />
+    <None Include="$(Msfs2024SdkPath)SimConnect SDK\include\SimConnect.h;$(Msfs2024SdkPath)version.txt">
       <LinkBase>SimConnect SDK</LinkBase>
     </None>
     <None Include="$(OutputPath)SimConnect.h">
