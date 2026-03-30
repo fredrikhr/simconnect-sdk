@@ -1,8 +1,16 @@
 {
   "profiles": {
-    "Project": {
+    "MSFS": {
       "commandName": "Project",
-      "commandLineArgs": "--source-directory \"$(MSBuildProjectDirectory)/../FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.ClangSharp/Xml\"",
+      "commandLineArgs": "\"[config:Logging:LogLevel:Default=Debug]\" \"[config:Logging:LogLevel:Microsoft.Extensions.Hosting=Warning]\" --source-directory \"$(MSBuildProjectDirectory)/../../generated/MSFS/Xml\"",
+      "workingDirectory": "$(MSBuildProjectDirectory)",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    },
+    "MSFS2024": {
+      "commandName": "Project",
+      "commandLineArgs": "\"[config:Logging:LogLevel:Default=Debug]\" \"[config:Logging:LogLevel:Microsoft.Extensions.Hosting=Warning]\" --source-directory \"$(MSBuildProjectDirectory)/../../generated/MSFS2024/Xml\"",
       "workingDirectory": "$(MSBuildProjectDirectory)",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"

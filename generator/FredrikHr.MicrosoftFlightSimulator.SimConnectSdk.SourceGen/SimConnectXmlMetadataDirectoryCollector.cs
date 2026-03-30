@@ -1,12 +1,13 @@
+using System.CommandLine.Hosting;
 using System.Xml;
 using System.Xml.Serialization;
 
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using ClangSharp.XmlMetadata;
-using Microsoft.Extensions.FileProviders;
 
 namespace FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.SourceGen;
 
@@ -21,7 +22,7 @@ internal sealed partial class SimConnectXmlMetadataDirectoryCollector(
     XmlSerializerFactory xmlFactory,
     IOptions<XmlReaderSettings> xmlOptions,
     ILogger<SimConnectXmlMetadataDirectoryCollector> logger
-    )
+    ) : ICommandLineHostedExecution
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage(
         "Performance",
@@ -41,7 +42,7 @@ internal sealed partial class SimConnectXmlMetadataDirectoryCollector(
     private readonly Dictionary<string, PInvokeEnumeration> enums =
         new(StringComparer.Ordinal);
 
-    public void Execute()
+    private void Execute()
     {
         IEnumerable<IFileInfo> files = env.ContentRootFileProvider
             .GetDirectoryContents(string.Empty)
@@ -101,4 +102,10 @@ internal sealed partial class SimConnectXmlMetadataDirectoryCollector(
 
     [LoggerMessage(LogLevel.Error, $"")]
     private partial void LogCollectionIncomplete();
+
+    Task<int> ICommandLineHostedExecution.InvokeAsync(CancellationToken cancelToken)
+    {
+        Execute();
+        return Task.FromResult(0);
+    }
 }

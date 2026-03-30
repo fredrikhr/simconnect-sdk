@@ -1,8 +1,6 @@
 using System.CommandLine;
-using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
 using System.CommandLine.Parsing;
-using System.CommandLine.NamingConventionBinder;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Xml.Resolvers;
@@ -11,33 +9,42 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.SourceGen;
-using System.CommandLine.Invocation;
 
+Option<DirectoryInfo> sourceDirCliOption = new(
+    "--source-directory",
+    "-s"
+    )
+{
+    Required = true,
+};
+sourceDirCliOption.AcceptExistingOnly();
 RootCommand cliCommand = new()
 {
-    Handler = CommandHandler.Create<IHost, CancellationToken>(RunCli),
+    TreatUnmatchedTokensAsErrors = false,
+    Directives = {
+        new HostConfigurationDirective(),
+        new EnvironmentVariablesDirective(),
+    },
+    Options = { sourceDirCliOption },
 };
-Option<DirectoryInfo> sourceDirCliOption = new("--source-directory");
-sourceDirCliOption.ExistingOnly();
-sourceDirCliOption.AddAlias("--source-dir");
-sourceDirCliOption.AddAlias("-s");
-sourceDirCliOption.IsRequired = true;
-cliCommand.AddOption(sourceDirCliOption);
-
-CommandLineBuilder cliBuilder = new(cliCommand);
-cliBuilder.UseDefaults();
-cliBuilder.UseHost(Host.CreateDefaultBuilder, host =>
-{
-    InvocationContext context = host.GetInvocationContext();
-    ParseResult parseResult = context.ParseResult;
-    string sourceDirectory = parseResult
-        .GetValueForOption(sourceDirCliOption)!
-        .FullName;
-    host.UseContentRoot(sourceDirectory);
-    host.ConfigureServices(ConfigureServices);
-});
-return await cliBuilder.Build().InvokeAsync(args)
+cliCommand.UseHostExecution<SimConnectXmlMetadataDirectoryCollector>(
+    CreateHostBuilder,
+    static host => host.ConfigureServices(ConfigureServices)
+    );
+await cliCommand.Parse(args).InvokeAsync()
     .ConfigureAwait(continueOnCapturedContext: false);
+
+IHostBuilder CreateHostBuilder(string[] builderArgs, ParseResult parseResult)
+{
+    IHostBuilder hostBuilder = Host.CreateDefaultBuilder(builderArgs);
+    if (parseResult.GetResult(sourceDirCliOption) is OptionResult sourceDirResult &&
+        sourceDirResult.GetValueOrDefault<DirectoryInfo>() is DirectoryInfo sourceDirInfo
+        )
+    {
+        hostBuilder.UseContentRoot(sourceDirInfo.FullName);
+    }
+    return hostBuilder;
+}
 
 static void ConfigureServices(IServiceCollection services)
 {
@@ -52,17 +59,4 @@ static void ConfigureServices(IServiceCollection services)
         });
 
     services.AddSingleton<SimConnectXmlMetadataDirectoryCollector>();
-}
-
-static Task RunCli(IHost host, CancellationToken cancelToken)
-{
-    var appLifetime = host.Services.GetRequiredService<IHostApplicationLifetime>();
-    using IDisposable cancelReg = cancelToken.Register(
-        static s => ((IHostApplicationLifetime)s!).StopApplication(),
-        appLifetime
-        );
-    var collector = host.Services.GetRequiredService<SimConnectXmlMetadataDirectoryCollector>();
-    collector.Execute();
-    appLifetime.StopApplication();
-    return host.WaitForShutdownAsync(cancelToken);
 }
