@@ -2,6 +2,11 @@
   <Configurations>
     <Platform Name="x64" />
   </Configurations>
+  <Folder Name="/.submodules/" />
+  <Folder Name="/.submodules/fredrikhr/" />
+  <Folder Name="/.submodules/fredrikhr/dotnet-generichost-extensions/">
+    <Project Path=".submodules/fredrikhr/dotnet-generichost-extensions/src/FredrikHr.CommandLineApi.Hosting/FredrikHr.CommandLineApi.Hosting.csproj" />
+  </Folder>
   <Folder Name="/build/">
     <Project Path="build/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.MSBuild/FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.MSBuild.csproj" />
   </Folder>

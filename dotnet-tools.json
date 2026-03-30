@@ -3,11 +3,11 @@
   "isRoot": true,
   "tools": {
     "clangsharppinvokegenerator": {
-      "version": "18.1.0.3",
+      "version": "21.1.8.3",
       "commands": [
         "ClangSharpPInvokeGenerator"
       ],
-      "rollForward": false
+      "rollForward": true
     }
   }
 }
