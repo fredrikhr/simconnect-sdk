@@ -20,11 +20,6 @@ Option<DirectoryInfo> sourceDirCliOption = new(
 sourceDirCliOption.AcceptExistingOnly();
 RootCommand cliCommand = new()
 {
-    TreatUnmatchedTokensAsErrors = false,
-    Directives = {
-        new HostConfigurationDirective(),
-        new EnvironmentVariablesDirective(),
-    },
     Options = { sourceDirCliOption },
 };
 cliCommand.UseHostExecution<SimConnectXmlMetadataDirectoryCollector>(
