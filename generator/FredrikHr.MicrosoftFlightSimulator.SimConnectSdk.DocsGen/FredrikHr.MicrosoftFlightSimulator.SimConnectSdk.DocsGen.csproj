@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <LangVersion>12</LangVersion>
+    <LangVersion>14</LangVersion>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -12,6 +12,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="ReverseMarkdown" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\.submodules\fredrikhr\dotnet-generichost-extensions\src\FredrikHr.CommandLineApi.Hosting\FredrikHr.CommandLineApi.Hosting.csproj" />
   </ItemGroup>
 
 </Project>

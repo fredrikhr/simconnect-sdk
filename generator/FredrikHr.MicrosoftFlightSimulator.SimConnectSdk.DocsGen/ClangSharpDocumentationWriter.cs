@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen;
 
-internal partial class ClangSharpDocumentationWriter(
+internal sealed partial class ClangSharpDocumentationWriter(
     string xmlFilePath,
     XmlWriterSettings xmlWriterSettings,
     ILogger<ClangSharpDocumentationWriter>? logger = null

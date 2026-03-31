@@ -2,18 +2,18 @@ using Microsoft.Extensions.Hosting;
 
 namespace FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen;
 
-internal class MsfsDocsTableOfContentsProvider(
+internal sealed class MsfsDocsTableOfContentsProvider(
     MsfsDocsWebsiteClient websiteClient,
     IHostApplicationLifetime lifetime
     ) : IDisposable
 {
-    private readonly Task<MsfsDocTableOfContentsTree> rootTask =
+    private readonly Task<MsfsDocsTableOfContentsTree> rootTask =
         YieldAndGetTocAsync(websiteClient, lifetime.ApplicationStopping);
 
-    public async Task<MsfsDocTableOfContentsTree> GetTableOfContentsAsync() =>
+    internal async Task<MsfsDocsTableOfContentsTree> GetTableOfContentsAsync() =>
         await rootTask.ConfigureAwait(false);
 
-    private static async Task<MsfsDocTableOfContentsTree> YieldAndGetTocAsync(
+    private static async Task<MsfsDocsTableOfContentsTree> YieldAndGetTocAsync(
         MsfsDocsWebsiteClient websiteClient,
         CancellationToken cancelToken = default
         )

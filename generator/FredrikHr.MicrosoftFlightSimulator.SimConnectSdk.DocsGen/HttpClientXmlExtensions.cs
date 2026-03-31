@@ -4,9 +4,9 @@ using System.Xml.XPath;
 
 namespace FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen;
 
-public static class HttpClientXmlExtensions
+internal static class HttpClientXmlExtensions
 {
-    public static async Task<XmlDocument> GetXmlDocumentAsync(
+    internal static async Task<XmlDocument> GetXmlDocumentAsync(
         this HttpClient httpClient,
         Uri? requestUri,
         XmlReaderSettings? xmlSettings,
@@ -41,7 +41,7 @@ public static class HttpClientXmlExtensions
         return respXmlDoc;
     }
 
-    public static async Task<XPathDocument> GetXPathDocumentAsync(
+    internal static async Task<XPathDocument> GetXPathDocumentAsync(
         this HttpClient httpClient,
         Uri? requestUri,
         XmlReaderSettings? xmlSettings,

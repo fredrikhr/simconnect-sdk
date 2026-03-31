@@ -6,11 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen;
 
-internal class MsfsDocsWebsiteClient(HttpClient httpClient) : IDisposable
+internal sealed class MsfsDocsWebsiteClient(HttpClient httpClient) : IDisposable
 {
     internal static readonly Uri BaseAddress = new("https://docs.flightsimulator.com/html/");
 
-    public async Task<MsfsDocTableOfContentsTree> GetTableOfContentsAsync(
+    internal async Task<MsfsDocsTableOfContentsTree> GetTableOfContentsAsync(
         CancellationToken cancelToken = default)
     {
         var rootTree = await GetMsfsDocsTocListByKeyRecursiveAsync(
@@ -23,7 +23,7 @@ internal class MsfsDocsWebsiteClient(HttpClient httpClient) : IDisposable
         return rootTree;
     }
 
-    private async Task<MsfsDocTableOfContentsTree>
+    private async Task<MsfsDocsTableOfContentsTree>
         GetMsfsDocsTocListByKeyRecursiveAsync(
         string key,
         string name,
@@ -32,18 +32,23 @@ internal class MsfsDocsWebsiteClient(HttpClient httpClient) : IDisposable
         CancellationToken cancelToken = default
         )
     {
-        var tocList = await GetMsfsDocsTocListByKeyAsync(key, cancelToken)
+        List<MsfsDocsTableOfContentsRawItem> tocList =
+            await GetMsfsDocsTocListByKeyAsync(key, cancelToken)
             .ConfigureAwait(continueOnCapturedContext: false);
-        var tocItems = tocList.Where(i => string.IsNullOrEmpty(i.Key))
-            .ToDictionary(
-                static i => i.Name,
-                static i => new MsfsDocTableOfContentsItem
-                {
-                    Name = i.Name,
-                    Type = i.Type,
-                    Uri = new(BaseAddress, i.RelativeUrl),
-                }
-            );
+        Dictionary<string, MsfsDocsTableOfContentsItem> tocItems =
+            new(StringComparer.InvariantCultureIgnoreCase);
+        foreach (
+            MsfsDocsTableOfContentsRawItem? keyLessRawItem in
+            tocList.Where(i => string.IsNullOrEmpty(i.Key))
+            )
+        {
+            tocItems[keyLessRawItem.Name] = new()
+            {
+                Name = keyLessRawItem.Name,
+                Type = keyLessRawItem.Type,
+                Uri = new(BaseAddress, keyLessRawItem.RelativeUrl),
+            };
+        }
         var tocKeyTasks = tocList.Where(i => !string.IsNullOrEmpty(i.Key))
             .Select(i => GetMsfsDocsTocListByKeyRecursiveAsync(
                 i.Key!,
@@ -83,6 +88,7 @@ internal class MsfsDocsWebsiteClient(HttpClient httpClient) : IDisposable
         return tocList ?? [];
     }
 
+    [System.Diagnostics.DebuggerDisplay($"{nameof(Key)} = {{{nameof(Key)}}}; {nameof(Name)} = {{{nameof(Name)}}}; {nameof(Type)} = {{{nameof(Type)}}}; Url = {{{nameof(RelativeUrl)}}}")]
     private class MsfsDocsTableOfContentsRawItem
     {
         [JsonPropertyName("name")]
@@ -127,7 +133,7 @@ internal class MsfsDocsWebsiteClient(HttpClient httpClient) : IDisposable
         throw new JsonException();
     }
 
-    public static HttpClientHandler GetHttpMessageHandler(IServiceProvider serviceProvider)
+    internal static HttpClientHandler GetHttpMessageHandler(IServiceProvider serviceProvider)
     {
         var cookies = serviceProvider.GetRequiredService<CookieContainer>();
         return new()
