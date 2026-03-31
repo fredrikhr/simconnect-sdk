@@ -22,7 +22,7 @@ internal sealed partial class SimConnectXmlMetadataDirectoryCollector(
     XmlSerializerFactory xmlFactory,
     IOptions<XmlReaderSettings> xmlOptions,
     ILogger<SimConnectXmlMetadataDirectoryCollector> logger
-    ) : ICommandLineHostedExecution
+    ) : IHostedCommandExecution
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage(
         "Performance",
@@ -103,7 +103,7 @@ internal sealed partial class SimConnectXmlMetadataDirectoryCollector(
     [LoggerMessage(LogLevel.Error, $"")]
     private partial void LogCollectionIncomplete();
 
-    Task<int> ICommandLineHostedExecution.InvokeAsync(CancellationToken cancelToken)
+    Task<int> IHostedCommandExecution.InvokeAsync(CancellationToken cancelToken)
     {
         Execute();
         return Task.FromResult(0);
