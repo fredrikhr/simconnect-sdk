@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 using Microsoft.Build.Framework;
@@ -10,11 +8,16 @@ public partial class SimConnectSdkHeaderFixup : Microsoft.Build.Utilities.Task
 {
     [Required]
     [Output]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(
+        "Performance",
+        "CA1819: Properties should not return arrays",
+        Justification = nameof(ITask)
+        )]
     public ITaskItem[] Lines { get; set; } = default!;
 
     public override bool Execute()
     {
-        foreach (var taskItem in Lines ?? Array.Empty<ITaskItem>())
+        foreach (var taskItem in Lines ?? [])
         {
             string inputText = taskItem.ItemSpec;
             string replacedText = inputText;
@@ -29,10 +32,15 @@ public partial class SimConnectSdkHeaderFixup : Microsoft.Build.Utilities.Task
         return true;
     }
 
-    private static readonly List<Regex> regexes = new()
-    {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(
+        "Performance",
+        "SYSLIB1045: Convert to 'GeneratedRegexAttribute'.",
+        Justification = ".NET Framework Compatibility"
+        )]
+    private static readonly List<Regex> regexes =
+    [
         new(@"^#define\s+SIMCONNECT_STRING\(.*$"),
         new(@"^#define\s+SIMCONNECT_ENUM_FLAGS\s.*$"),
         new(@"^#define\s+SIMCONNECT_REFSTRUCT\s.*$"),
-    };
+    ];
 }

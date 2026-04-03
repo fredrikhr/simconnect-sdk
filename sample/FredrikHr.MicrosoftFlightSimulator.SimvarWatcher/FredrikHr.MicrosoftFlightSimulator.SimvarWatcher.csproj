@@ -8,8 +8,11 @@
 
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
+  <Import Project="..\..\bundle\MsfsSdkPath.props" />
+
   <PropertyGroup>
     <AssemblyName>Simvars</AssemblyName>
+    <Version>$(MsfsSdkFullVersion)</Version>
     <LangVersion>13</LangVersion>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net48</TargetFramework>
@@ -21,7 +24,6 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <Import Project="..\..\bundle\MsfsSdkPath.props" />
   <PropertyGroup>
     <ApplicationIcon>$(MsfsSdkPath)\Samples\VisualStudio\SimvarWatcher\assets\SimVarWatcher48x48.ico</ApplicationIcon>
   </PropertyGroup>
@@ -80,15 +82,14 @@
     </Content>
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(SimConnectResolutionSource)' == 'LocalPackageReference'">
-    <RestoreAdditionalProjectSources>$(BasePackageOutputPath)Release\</RestoreAdditionalProjectSources>
-  </PropertyGroup>
   <ItemGroup Condition="'$(SimConnectResolutionSource)' == 'LocalPackageReference'">
     <PackageReference Include="FredrikHr.MicrosoftFlightSimulator.SimConnectManaged.Bundle">
-      <Version>$(MsfsSdkVersion)</Version>
+      <ProjectReference>..\..\bundle\FredrikHr.MicrosoftFlightSimulator.SimConnectManaged.Bundle\FredrikHr.MicrosoftFlightSimulator.SimConnectManaged.Bundle.csproj</ProjectReference>
+      <VersionOverride>$(MsfsSdkVersion)</VersionOverride>
     </PackageReference>
     <PackageReference Include="FredrikHr.MicrosoftFlightSimulator.SimConnectNative.Bundle">
-      <Version>$(MsfsSdkVersion)</Version>
+      <ProjectReference>..\..\bundle\FredrikHr.MicrosoftFlightSimulator.SimConnectNative.Bundle\FredrikHr.MicrosoftFlightSimulator.SimConnectNative.Bundle.csproj</ProjectReference>
+      <VersionOverride>$(MsfsSdkVersion)</VersionOverride>
     </PackageReference>
   </ItemGroup>
 

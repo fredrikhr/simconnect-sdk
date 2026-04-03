@@ -10,6 +10,13 @@
   <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
 
   <PropertyGroup>
+    <PackageLicenseFile></PackageLicenseFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="$(MSBuildThisFileDirectory)..\LICENSE" />
+  </ItemGroup>
+
+  <PropertyGroup>
     <MSBuildAllProjects>
       $(MSBuildAllProjects);$(MSBuildThisFileDirectory)MsfsSdkPath.props
     </MSBuildAllProjects>

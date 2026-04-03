@@ -3,14 +3,38 @@
 
   <PropertyGroup>
     <LangVersion>14</LangVersion>
-    <TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
-    <ImplicitUsings>disable</ImplicitUsings>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <NoWarn>$(NoWarn);NU5100</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version>1.0.0</Version>
+    <Description>No description provided.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Framework" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" />
+    <PackageReference Include="
+        Microsoft.Build.Framework;
+        Microsoft.Build.Utilities.Core;
+        "
+      PrivateAssets="all"
+    />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="build\*.props;build\*.targets" Pack="true">
+      <PackagePath>build\$(PackageId)%(Extension);buildMultiTargeting\$(PackageId)%(Extension)</PackagePath>
+    </Content>
+    <Content Include="tasks\ThisPackage.tasks" Pack="true">
+      <PackagePath>tasks</PackagePath>
+    </Content>
   </ItemGroup>
 
 </Project>

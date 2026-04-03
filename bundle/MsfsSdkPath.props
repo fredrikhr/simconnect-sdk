@@ -5,7 +5,8 @@
     <MsfsSdkPath>$([MSBuild]::EnsureTrailingSlash('$(MSFS_SDK)'))</MsfsSdkPath>
   </PropertyGroup>
   <PropertyGroup>
-    <MsfsSdkVersion>$([System.IO.File]::ReadAllText('$([MSBuild]::EnsureTrailingSlash('$(MSFS_SDK)'))version.txt').Trim())</MsfsSdkVersion>
+    <MsfsSdkFullVersion>$([System.IO.File]::ReadAllText('$([MSBuild]::EnsureTrailingSlash('$(MSFS_SDK)'))version.txt').Trim())</MsfsSdkFullVersion>
+    <MsfsSdkVersion>$([System.Version]::Parse($(MsfsSdkFullVersion)).ToString(3))</MsfsSdkVersion>
   </PropertyGroup>
 
 </Project>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project TreatAsLocalProperty="ThisPackageBuildExtensionsDirectory;SimConnectCustomTasksAssembly">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+
+    <!-- Update path to net8.0 after net6.0 decommission.  Machines with only net8.0 can succesfully run the net6.0 bits. -->
+    <ThisPackageBuildExtensionsDirectory Condition="'$(MSBuildRuntimeType)' == 'Core'">$(MSBuildThisFileDirectory)net8.0\</ThisPackageBuildExtensionsDirectory>
+    <ThisPackageBuildExtensionsDirectory Condition="'$(MSBuildRuntimeType)' != 'Core'">$(MSBuildThisFileDirectory)net472\</ThisPackageBuildExtensionsDirectory>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SimConnectCustomTasksAssembly>$(ThisPackageBuildExtensionsDirectory)FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.MSBuild.dll</SimConnectCustomTasksAssembly>
+  </PropertyGroup>
+
+  <UsingTask TaskName="SimConnectSdkHeaderFixup" AssemblyFile="$(SimConnectCustomTasksAssembly)" />
+
+</Project>

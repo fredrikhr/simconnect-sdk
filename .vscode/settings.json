@@ -1,6 +1,7 @@
 {
   "files.associations": {
-    "*.slnx": "xml"
+    "*.slnx": "xml",
+    "*.tasks": "xml"
   },
   "dotnet.defaultSolution": "FredrikHr SimConnect SDK.slnx"
 }

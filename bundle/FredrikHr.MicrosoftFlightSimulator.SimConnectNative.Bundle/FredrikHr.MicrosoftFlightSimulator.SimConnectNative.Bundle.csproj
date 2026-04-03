@@ -11,7 +11,12 @@
   <Import Sdk="Microsoft.Build.NoTargets" Project="Sdk.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.0</TargetFramework>
+    <Description>No description provided.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- TFM is stripped when packing, use a TFM that makes the compiler happy -->
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -38,6 +43,16 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FredrikHr.NupkgMSBuild.StripNuspecTfm">
+      <ProjectReference>..\..\.submodules\fredrikhr\nuget-msbuild-extensions\build\FredrikHr.NupkgMSBuild.StripNuspecTfm\FredrikHr.NupkgMSBuild.StripNuspecTfm.csproj</ProjectReference>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <GenerateNuspecStripTargetFrameworkAttributes>true</GenerateNuspecStripTargetFrameworkAttributes>
+  </PropertyGroup>
 
   <Import Sdk="Microsoft.Build.NoTargets" Project="Sdk.targets" />
   <Import Project="..\BundleBuildOutput.targets" />

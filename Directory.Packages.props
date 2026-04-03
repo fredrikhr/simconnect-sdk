@@ -12,6 +12,18 @@
       <Version>1.15.0</Version>
     </GlobalPackageReference>
   </ItemGroup>
+  <ItemGroup Label="NuGet Extensions">
+    <PackageVersion Include="FredrikHr.NupkgMSBuild.StripNuspecTfm">
+      <Version>1.0.1</Version>
+    </PackageVersion>
+    <PackageVersion Include="FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference">
+      <Version>1.0.1</Version>
+    </PackageVersion>
+    <PackageReference Include="FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference">
+      <ProjectReference>$(MSBuildThisFileDirectory).submodules\fredrikhr\nuget-msbuild-extensions\build\FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference\FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference.csproj</ProjectReference>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
   <ItemGroup Label="MSBuild">
     <PackageVersion
       Include="
@@ -35,5 +47,26 @@
   <ItemGroup>
     <PackageVersion Include="ClangSharp.PInvokeGenerator" Version="21.1.8.3" />
     <PackageVersion Include="ReverseMarkdown" Version="5.3.0" />
+  </ItemGroup>
+  <ItemGroup Label="Repository internal">
+    <PackageVersion Include="FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.MSBuild">
+      <Version>1.0.0</Version>
+    </PackageVersion>
+    <PackageVersion
+      Include="
+        FredrikHr.MicrosoftFlightSimulator.SimConnectManaged.Bundle;
+        FredrikHr.MicrosoftFlightSimulator.SimConnectNative.Bundle;
+        "
+    >
+      <Version>0.1.0</Version>
+    </PackageVersion>
+    <PackageVersion
+      Include="
+        FredrikHr.MicrosoftFlightSimulator2024.SimConnectManaged.Bundle;
+        FredrikHr.MicrosoftFlightSimulator2024.SimConnectNative.Bundle;
+        "
+    >
+      <Version>1.0.0</Version>
+    </PackageVersion>
   </ItemGroup>
 </Project>

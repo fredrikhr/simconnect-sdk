@@ -11,7 +11,12 @@
   <Import Sdk="Microsoft.Build.NoTargets" Project="Sdk.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.0</TargetFramework>
+    <Description>No description provided.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- TFM is stripped when packing, use a TFM that makes the compiler happy -->
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
