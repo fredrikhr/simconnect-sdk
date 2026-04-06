@@ -2,13 +2,38 @@ using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen.CommandLine;
+
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen;
 
-internal sealed class MsfsDocsWebsiteClient(HttpClient httpClient) : IDisposable
+internal sealed class MsfsDocsWebsiteClient : IDisposable
 {
-    internal static readonly Uri BaseAddress = new("https://docs.flightsimulator.com/html/");
+    private static readonly JsonReaderOptions TocJsonOptions = new()
+    {
+        AllowTrailingCommas = true,
+        CommentHandling = JsonCommentHandling.Skip,
+    };
+
+    internal static readonly Uri MsfsRootAddress = new("https://docs.flightsimulator.com/");
+    internal static readonly Uri Msfs2024RootAddress = new(MsfsRootAddress, "msfs2024/");
+    private readonly HttpClient httpClient;
+    public Uri BaseAddress { get; }
+
+    public MsfsDocsWebsiteClient(IOptions<CliOptions> cliOptions, HttpClient httpClient)
+    {
+        this.httpClient = httpClient;
+        Uri rootAddress = cliOptions.Value.Target switch
+        {
+            MsfsVariantTarget.MSFS => MsfsRootAddress,
+            MsfsVariantTarget.MSFS2024 => Msfs2024RootAddress,
+            _ => MsfsRootAddress,
+        };
+        BaseAddress = new(rootAddress, "html/");
+        httpClient.BaseAddress = BaseAddress;
+    }
 
     internal async Task<MsfsDocsTableOfContentsTree> GetTableOfContentsAsync(
         CancellationToken cancelToken = default)
@@ -114,11 +139,7 @@ internal sealed class MsfsDocsWebsiteClient(HttpClient httpClient) : IDisposable
             )
         {
             utfJsonData = utfJsonData[offset..];
-            Utf8JsonReader jsonReader = new(utfJsonData, new()
-            {
-                AllowTrailingCommas = true,
-                CommentHandling = JsonCommentHandling.Skip,
-            });
+            Utf8JsonReader jsonReader = new(utfJsonData, TocJsonOptions);
             try
             {
                 JsonDocument jsonDoc = JsonDocument.ParseValue(ref jsonReader);

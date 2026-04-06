@@ -4,8 +4,6 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
 
-using HtmlAgilityPack;
-
 using Microsoft.Extensions.Options;
 
 namespace FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen;
@@ -14,8 +12,7 @@ internal sealed partial class MsfsDocsReleaseNotesProvider(
     HttpClient httpClient,
     MsfsDocsTableOfContentsProvider tocProvider,
     IOptionsMonitor<XmlReaderSettings> xmlReaderSettings,
-    IOptionsMonitor<XmlWriterSettings> xmlWriterSettings,
-    IOptionsMonitor<ReverseMarkdown.Config> reverseMarkdownConfig
+    IOptionsMonitor<XmlWriterSettings> xmlWriterSettings
     )
 {
     internal const string ReleaseNotesTocItemName = "Release Notes";
@@ -105,8 +102,9 @@ internal sealed partial class MsfsDocsReleaseNotesProvider(
             );
 
 #pragma warning disable IDE0028 // Simplify collection initialization
-        Dictionary<Version, string> notesVersionMarkdownTexts =
+        Dictionary<Version, string> notesVersionHtmlTexts =
             new(capacity: notesVersionPointers.Count);
+#pragma warning restore IDE0028 // Simplify collection initialization
         for (int notesVersionPointerIdx = 0;
             notesVersionPointerIdx < notesVersionPointers.Count;
             notesVersionPointerIdx++)
@@ -117,14 +115,9 @@ internal sealed partial class MsfsDocsReleaseNotesProvider(
                 notesVersionPointers,
                 notesVersionPointerIdx
                 );
-            ReverseMarkdown.Config mdConvertConfig = reverseMarkdownConfig.CurrentValue;
-            ReverseMarkdown.Converter mdConverter = new(mdConvertConfig);
-            mdConverter.Register("a", new ReverseMarkdownAWithBaseConverter(notesUri, mdConverter));
-            string mdText = mdConverter.Convert(htmlText);
-            notesVersionMarkdownTexts[notesVersionPointerItem.Version] = mdText;
+            notesVersionHtmlTexts[notesVersionPointerItem.Version] = htmlText;
         }
-        return notesVersionMarkdownTexts;
-#pragma warning restore IDE0028 // Simplify collection initialization
+        return notesVersionHtmlTexts;
     }
 
     private string CreateReleaseNotesVersionDocument(
@@ -148,6 +141,10 @@ internal sealed partial class MsfsDocsReleaseNotesProvider(
             htmlWriter.WriteStartElement("head");
 
             htmlWriter.WriteElementString("title", htmlHeading);
+
+            htmlWriter.WriteStartElement("meta");
+            htmlWriter.WriteAttributeString("charset", Encoding.UTF8.WebName);
+            htmlWriter.WriteEndElement(); // meta charset=utf-8
 
             htmlWriter.WriteStartElement("base");
             htmlWriter.WriteAttributeString("href", uri.ToString());
@@ -199,7 +196,7 @@ internal sealed partial class MsfsDocsReleaseNotesProvider(
             XPathNavigator xnav = ContainerNav.Clone();
             if (Boundary is XPathNavigator boundary)
             {
-                htmlWriter.WriteElementString(xnav.LocalName, Heading);
+                htmlWriter.WriteElementString("h2", Heading);
                 for (
                     bool movedXNav = xnav.MoveToNext();
                     movedXNav && !xnav.IsSamePosition(boundary);
@@ -228,21 +225,4 @@ internal sealed partial class MsfsDocsReleaseNotesProvider(
         \bSDK release\s+(?<version>\d+\.\d+\.\d+)\b
         """, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     internal static partial Regex GetSdkReleaseVersionRegex();
-
-    private class ReverseMarkdownAWithBaseConverter(
-        Uri baseUri,
-        ReverseMarkdown.Converter converter
-        ) : ReverseMarkdown.Converters.A(converter)
-    {
-        public override void Convert(TextWriter writer, HtmlNode node)
-        {
-            string href = node.GetAttributeValue("href", string.Empty);
-            if (!string.IsNullOrEmpty(href))
-            {
-                Uri resolved = new(baseUri, href);
-                node.SetAttributeValue("href", resolved.ToString());
-            }
-            base.Convert(writer, node);
-        }
-    }
 }

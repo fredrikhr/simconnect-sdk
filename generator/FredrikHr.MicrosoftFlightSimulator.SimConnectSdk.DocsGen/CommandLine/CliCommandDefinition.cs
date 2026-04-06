@@ -8,7 +8,7 @@ using System.Xml.Resolvers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen;
+namespace FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.DocsGen.CommandLine;
 
 internal sealed class CliCommandDefinition : IHostedApplicationRootCommandDefinition<CliCommandDefinition>
 {
@@ -16,9 +16,24 @@ internal sealed class CliCommandDefinition : IHostedApplicationRootCommandDefini
 
     public RootCommand RootCommand { get; }
 
-    public CliCommandDefinition()
+    public Option<MsfsVariantTarget> TargetOption { get; }
+
+    private CliCommandDefinition()
     {
-        RootCommand = [];
+        TargetOption = new("--target", "-t")
+        {
+            Arity = ArgumentArity.ZeroOrOne,
+            Description = "Microsoft Flight Simulator variant to generate",
+            DefaultValueFactory = static (_) => MsfsVariantTarget.MSFS,
+        };
+        TargetOption.Configure<CliOptions, MsfsVariantTarget>(
+            (opts, value) => opts.Target = value
+            );
+        RootCommand = new()
+        {
+            Description = "Generates Release notes, licesense information and .NET XML documentation comments for Microsoft Flight Simulator using the SDK documentation web portal.",
+            Options = { TargetOption },
+        };
         RootCommand.UseHostExecution<CliCommandExecution>(ConfigureHost);
     }
 
@@ -29,12 +44,10 @@ internal sealed class CliCommandDefinition : IHostedApplicationRootCommandDefini
             hostBuilder.Environment.ContentRootPath
             );
         IServiceCollection services = hostBuilder.Services;
+        services.AddOptions<CliOptions>()
+            .BindConfiguration(nameof(CliOptions));
         services.AddSingleton<CookieContainer>();
         services.AddHttpClient<MsfsDocsWebsiteClient>()
-            .ConfigureHttpClient(http =>
-            {
-                http.BaseAddress = MsfsDocsWebsiteClient.BaseAddress;
-            })
             .ConfigurePrimaryHttpMessageHandler(MsfsDocsWebsiteClient.GetHttpMessageHandler);
         services.AddSingleton<MsfsDocsTableOfContentsProvider>();
 
@@ -55,10 +68,6 @@ internal sealed class CliCommandDefinition : IHostedApplicationRootCommandDefini
         services.AddSingleton<ClangSharpDocumentationWriterFactory>();
 
         services.AddSingleton<MsfsDocsReleaseNotesProvider>();
-
-        services.Configure<ReverseMarkdown.Config>(static config =>
-        {
-            config.SmartHrefHandling = true;
-        });
+        services.AddSingleton<MsfsDocsReleaseNotesEmitter>();
     }
 }

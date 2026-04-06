@@ -1,8 +1,13 @@
 {
   "profiles": {
-    "Development": {
+    "MSFS": {
       "commandName": "Project",
-      "commandLineArgs": "--environment Development --contentroot \"$(MSBuildProjectDirectory)/../../generated\"",
+      "commandLineArgs": "--environment Development --contentroot \"$(MSBuildProjectDirectory)/../../docs/MSFS\" --target MSFS",
+      "workingDirectory": "$(MSBuildProjectDirectory)"
+    },
+    "MSFS2024": {
+      "commandName": "Project",
+      "commandLineArgs": "--environment Development --contentroot \"$(MSBuildProjectDirectory)/../../docs/MSFS2024\" --target MSFS2024",
       "workingDirectory": "$(MSBuildProjectDirectory)"
     }
   }
