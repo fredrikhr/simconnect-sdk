@@ -1,7 +1,7 @@
 --library-path
 SimConnect.dll
 --namespace
-FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.Interop
+FredrikHr.MicrosoftFlightSimulator2024.SimConnectSdk.Interop
 --method-class-name
 SimConnectNativeRawApi
 --config
@@ -43,3 +43,4 @@ SIMCONNECT_STRING
 SIMCONNECT_STRINGV
 SIMCONNECT_DATAV
 SIMCONNECT_FIXEDTYPE_DATAV
+SIMCONNECT_TYPEDEF

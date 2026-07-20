@@ -18,12 +18,11 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <OutputPath>$(MSBuildThisFileDirectory)..\..\generated\MSFS</OutputPath>
-    <TargetsTriggeredByCompilation>$(TargetsTriggeredByCompilation);ExecuteClangSharpPInvokeGenerator</TargetsTriggeredByCompilation>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.MSBuild">
-      <ProjectReference>..\..\build\FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.MSBuild\FredrikHr.MicrosoftFlightSimulator.SimConnectSdk.MSBuild.csproj</ProjectReference>
+      <ProjectReference>..\..\build\%(Identity)\%(Identity).csproj</ProjectReference>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
@@ -91,12 +90,17 @@
       <Output TaskParameter="DeletedFiles" ItemName="ClangSharpPInvokeGeneratorPreviousOutputDeleted" />
     </Delete>
     <Exec
-      Command="dotnet tool run ClangSharpPInvokeGenerator -- &quot;--output:%(ClangSharpPInvokeGeneratorExecution.GeneratorOutput)&quot; --output-mode:%(ClangSharpPInvokeGeneratorExecution.OutputMode) @(ClangSharpPInvokeGeneratorResponseFile->'&quot;@%(FullPath)&quot;', ' ') @(ClInclude->'&quot;--file:%(FullPath)&quot;', ' ')"
+      Command="dotnet tool run ClangSharpPInvokeGenerator -- --output &quot;%(ClangSharpPInvokeGeneratorExecution.GeneratorOutput)&quot; --output-mode &quot;%(ClangSharpPInvokeGeneratorExecution.OutputMode)&quot; @(ClangSharpPInvokeGeneratorResponseFile->'&quot;@%(FullPath)&quot;', ' ') @(ClInclude->'--file &quot;%(FullPath)&quot;', ' ')"
       IgnoreExitCode="false"
     >
       <Output TaskParameter="ExitCode" ItemName="ClangSharpPInvokeGeneratorExitCode" />
     </Exec>
     <Touch Files="@(ClangSharpPInvokeGeneratorExecution->'%(MarkerFile)')" AlwaysCreate="true" />
   </Target>
+
+  <Target
+    Name="AfterBuild"
+    DependsOnTargets="ExecuteClangSharpPInvokeGenerator"
+  />
 
 </Project>

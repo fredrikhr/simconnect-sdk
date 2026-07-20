@@ -9,8 +9,13 @@
   <Import Project="$(MSBuildThisFileDirectory)..\$(MSBuildThisFileName)$(MSBuildThisFileExtension)" />
 
   <ItemGroup>
-    <PackageReference Include="FredrikHr.NupkgMSBuild.StripNuspecTfm">
-      <ProjectReference>$(MSBuildThisFileDirectory)..\.submodules\fredrikhr\nuget-msbuild-extensions\build\FredrikHr.NupkgMSBuild.StripNuspecTfm\FredrikHr.NupkgMSBuild.StripNuspecTfm.csproj</ProjectReference>
+    <PackageReference
+      Include="
+        FredrikHr.NupkgMSBuild.StripNuspecTfm;
+        FredrikHr.NupkgMSBuild.InstallToFallbackFolder;
+        "
+    >
+      <ProjectReference>$(MSBuildThisFileDirectory)..\.submodules\fredrikhr\nuget-msbuild-extensions\build\%(Identity)\%(Identity).csproj</ProjectReference>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>

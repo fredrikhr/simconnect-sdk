@@ -6,15 +6,18 @@
   </PropertyGroup>
   <ItemGroup Label="Global Package References">
     <GlobalPackageReference Include="Microsoft.SourceLink.GitHub">
-      <Version>10.0.201</Version>
+      <Version>10.0.300</Version>
     </GlobalPackageReference>
     <GlobalPackageReference Include="PolySharp">
-      <Version>1.15.0</Version>
+      <Version>1.16.0</Version>
     </GlobalPackageReference>
   </ItemGroup>
   <ItemGroup Label="NuGet Extensions">
     <PackageVersion Include="FredrikHr.NupkgMSBuild.StripNuspecTfm">
       <Version>1.0.1</Version>
+    </PackageVersion>
+    <PackageVersion Include="FredrikHr.NupkgMSBuild.InstallToFallbackFolder">
+      <Version>1.1.0</Version>
     </PackageVersion>
     <PackageVersion Include="FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference">
       <Version>1.0.1</Version>
