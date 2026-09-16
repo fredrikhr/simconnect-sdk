@@ -5,7 +5,8 @@
     <Msfs2024SdkPath>$([MSBuild]::EnsureTrailingSlash('$(MSFS2024_SDK)'))</Msfs2024SdkPath>
   </PropertyGroup>
   <PropertyGroup>
-    <Msfs2024SdkVersion>$([System.IO.File]::ReadAllText('$([MSBuild]::EnsureTrailingSlash('$(MSFS2024_SDK)'))version.txt').Trim())</Msfs2024SdkVersion>
+    <Msfs2024SdkVersionFileContents>$([System.IO.File]::ReadAllText('$([MSBuild]::EnsureTrailingSlash('$(MSFS2024_SDK)'))version.txt').Trim())</Msfs2024SdkVersionFileContents>
+    <Msfs2024SdkVersion>$([System.Text.RegularExpressions.Regex]::Match('$(Msfs2024SdkVersionFileContents)', '^\d+\.\d+\.\d+(?:\.\d+)?').Value)</Msfs2024SdkVersion>
   </PropertyGroup>
 
 </Project>
