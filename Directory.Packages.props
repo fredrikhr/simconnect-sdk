@@ -6,7 +6,7 @@
   </PropertyGroup>
   <ItemGroup Label="Global Package References">
     <GlobalPackageReference Include="Microsoft.SourceLink.GitHub">
-      <Version>10.0.300</Version>
+      <Version>10.0.401</Version>
     </GlobalPackageReference>
     <GlobalPackageReference Include="PolySharp">
       <Version>1.16.0</Version>
@@ -17,7 +17,7 @@
       <Version>1.0.1</Version>
     </PackageVersion>
     <PackageVersion Include="FredrikHr.NupkgMSBuild.InstallToFallbackFolder">
-      <Version>1.1.0</Version>
+      <Version>1.1.1</Version>
     </PackageVersion>
     <PackageVersion Include="FredrikHr.NupkgMSBuild.GitHubPackageProjectUrlInference">
       <Version>1.0.1</Version>
@@ -33,7 +33,7 @@
         Microsoft.Build.Framework;
         Microsoft.Build.Utilities.Core;
         "
-      Version="18.4.0"
+      Version="18.10.1"
     />
   </ItemGroup>
   <ItemGroup Label="Microsoft Extension Libraries">
@@ -42,13 +42,13 @@
         Microsoft.Extensions.Hosting;
         Microsoft.Extensions.Http;
         "
-      Version="10.0.5"
+      Version="10.0.12"
     />
-    <PackageVersion Include="System.CommandLine" Version="2.0.5" />
-    <PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.269" />
+    <PackageVersion Include="System.CommandLine" Version="2.0.12" />
+    <PackageVersion Include="Microsoft.Windows.CsWin32" Version="0.3.333" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="ClangSharp.PInvokeGenerator" Version="21.1.8.3" />
+    <PackageVersion Include="ClangSharp.PInvokeGenerator" Version="21.1.8.4" />
     <PackageVersion Include="ReverseMarkdown" Version="5.3.0" />
   </ItemGroup>
   <ItemGroup Label="Repository internal">
